@@ -52,7 +52,6 @@ if (!form || !form.fields || form.fields.length === 0) {
 
 return (
   <>
-    <NavBar />
     <Box sx={{ maxWidth: 600, margin: 'auto', padding: 3, boxShadow: 3, borderRadius: 2 }}>
       <Typography variant="h4" gutterBottom align="center">
         {form.title || 'Untitled Form'}

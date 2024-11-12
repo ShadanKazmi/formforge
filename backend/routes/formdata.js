@@ -21,10 +21,12 @@ router.get('/:formId', async (req, res) => {
     }
 })
 
-router.get('/', async (req, res) => {
+router.get('/userForm/:userId', async (req, res) => {
+
+    const {userId} = req.params;
 
     try {
-        const forms = await Form.find();
+        const forms = await Form.find({userId});
         if (!forms || forms.length === 0) {
             return res.status(404).json({ message: 'No forms found' });
         }
@@ -37,28 +39,24 @@ router.get('/', async (req, res) => {
     }
 })
 
-
-router.post('/', async (req, res) => {
+router.post('/:userId', async (req, res) => {
     const { title, fields } = req.body;
+    const {userId} = req.params;
 
     if (!title || !fields) {
         return res.status(400).json({ message: 'Title and fields are required' });
     }
 
     try {
-        const formData = { title, fields };
 
-        if (req.user) {
-            formData.userId = req.user._id;
-        }
-
+        const formData = { title, fields, userId };
         const newForm = new Form(formData);
         const savedForm = await newForm.save();
 
-        if (req.user) {
-            await User.findByIdAndUpdate(req.user._id, { $push: { userForms: savedForm._id } });
-        }
-
+        await User.findByIdAndUpdate(userId, {
+            $push: { userForms: savedForm._id }
+        });
+        
         res.json(savedForm);
     } catch (error) {
         res.status(500).json({ message: 'Error saving form data', error: error.message });
@@ -68,7 +66,7 @@ router.post('/', async (req, res) => {
 
 router.post('/:formId/save', async (req, res) => {
     const { formId } = req.params;
-    const { answers } = req.body;
+    const { email, answers } = req.body;
 
     if (!answers || !Array.isArray(answers)) {
         return res.status(400).json({ message: 'Answers are required and should be an array' });
@@ -83,6 +81,7 @@ router.post('/:formId/save', async (req, res) => {
 
         const newResponse = new Response({
             formId,
+            email,
             answers,
         });
         const savedResponse = await newResponse.save();
@@ -107,7 +106,7 @@ router.get('/:formId/responses', async (req, res) => {
       }
   
       const responses = await Response.find({ formId });
-      res.json({ formId, responses });
+      res.json({ formId, responses, email });
     } catch (error) {
       res.status(500).json({ message: 'Error retrieving responses', error: error.message });
     }

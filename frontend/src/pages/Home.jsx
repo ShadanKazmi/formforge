@@ -8,15 +8,18 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
+import Cookies from 'js-cookie';
+
 
 const Home = () => {
   const [forms, setForms] = useState([]);
   const navigate = useNavigate();
+  const userId = Cookies.get('userId')
 
   useEffect(() => {
     const fetchForms = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/form/');
+        const response = await axios.get(`http://localhost:8000/form/userForm/${userId}`);
         setForms(response.data);
       } catch (error) {
         console.error('Error fetching forms:', error);
@@ -35,7 +38,6 @@ const Home = () => {
 
   return (
     <>
-      <NavBar />
       <div style={{ padding: '20px' }}>
         <Grid container spacing={2} justifyContent="center">
           {[...Array(5)].map((_, index) => (
@@ -66,7 +68,6 @@ const Home = () => {
           ))}
         </Grid>
 
-        {/* Add button to navigate to create form */}
         <IconButton
           color="primary"
           aria-label="create form"

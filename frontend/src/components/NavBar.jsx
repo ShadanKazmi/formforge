@@ -34,7 +34,8 @@ const NavBar = ({ title }) => {
             variant="h6"
             noWrap
             component="div"
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+            sx={{ mr: 2, display: { xs: 'none', md: 'flex', cursor:'pointer' } }}
+            onClick={()=>{navigate('/')}}
           >
             {title || 'Formable'}
           </Typography>
@@ -42,7 +43,7 @@ const NavBar = ({ title }) => {
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
             {userState && user ? (
               <>
-                <Button color="inherit" onClick={() => navigate('/your-forms')}>
+                <Button color="inherit" onClick={() => navigate('/')}>
                   Your Forms
                 </Button>
 

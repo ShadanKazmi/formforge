@@ -6,6 +6,10 @@ const responseSchema = new Schema ({
             ref: 'form',
             required: true
         },
+        email: {
+            type: String,
+            required: true
+        },
         answers: [{
             fieldId: {
                 type: Schema.Types.ObjectId,
