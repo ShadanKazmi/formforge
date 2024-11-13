@@ -6,16 +6,16 @@ import axios from 'axios';
 
 const Form = () => {
   const { formid } = useParams();
-  console.log(formid)
   const [form, setForm] = useState(null);
   const [responses, setResponses] = useState({});
+  const [email, setEmail] = useState(''); // State for the email field
+  const [emailError, setEmailError] = useState(false); // To handle email validation
 
   useEffect(() => {
     const fetchForm = async () => {
       try {
         const res = await axios.get(`http://localhost:8000/form/${formid}`);
         setForm(res.data);
-        console.log(res.data);
       } catch (error) {
         console.error('Error fetching form:', error);
       }
@@ -25,37 +25,50 @@ const Form = () => {
 
   const handleFieldChange = (fieldId, value) => {
     setResponses(prev => ({ ...prev, [fieldId]: value }));
-    console.log(responses)
   };
 
   const handleSubmit = async () => {
+    if (!email) {
+      setEmailError(true);
+      return;
+    }
+
     try {
       const answerData = Object.keys(responses).map(fieldId => ({
         fieldId,
-        answer: responses[fieldId]
+        answer: responses[fieldId],
       }));
-      console.log(answerData)
       await axios.post(`http://localhost:8000/form/${formid}/save`, 
-        { answers: answerData },
+        { email: email, answers: answerData },
         { headers: { 'Content-Type': 'application/json' } }
       );
-    alert('Form submitted successfully!');
-  } catch (error) {
-    console.error('Error submitting form:', error);
-    alert('Error submitting form. Please try again.');
+      alert('Form submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Error submitting form. Please try again.');
+    }
+  };
+
+  if (!form || !form.fields || form.fields.length === 0) {
+    return <Typography variant="h6" align="center">No form data available</Typography>;
   }
-};
 
-if (!form || !form.fields || form.fields.length === 0) {
-  return <Typography variant="h6" align="center">No form data available</Typography>;
-}
-
-return (
-  <>
+  return (
     <Box sx={{ maxWidth: 600, margin: 'auto', padding: 3, boxShadow: 3, borderRadius: 2 }}>
       <Typography variant="h4" gutterBottom align="center">
         {form.title || 'Untitled Form'}
       </Typography>
+
+      <TextField
+        variant="outlined"
+        fullWidth
+        label="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        error={emailError}
+        helperText={emailError ? 'Email is required' : ''}
+        sx={{ marginBottom: 3 }}
+      />
 
       {form.fields.map((field) => (
         <Box key={field._id} sx={{ marginBottom: 3 }}>
@@ -139,11 +152,10 @@ return (
         onClick={handleSubmit}
         sx={{ marginTop: 3 }}
       >
-        Send
+        Submit
       </Button>
     </Box>
-  </>
-);
+  );
 };
 
 export default Form;

@@ -8,17 +8,24 @@ const responseSchema = new Schema ({
         },
         email: {
             type: String,
-            required: true
+            required: true,
         },
         answers: [{
             fieldId: {
                 type: Schema.Types.ObjectId,
                 required: true
             },
+            label: {               // Add label field
+                type: String,
+                required: true
+            },
+            options: [{            // Add options field
+                type: String
+            }],
             answer: {
                 type: Schema.Types.Mixed,
-                required: true,
-            },
+                required: true
+            }
         }],
         submittedAt: { type: Date, default: Date.now },
     }

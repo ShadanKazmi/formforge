@@ -66,7 +66,7 @@ router.post('/:userId', async (req, res) => {
 
 router.post('/:formId/save', async (req, res) => {
     const { formId } = req.params;
-    const { email, answers } = req.body;
+    const {email, answers} = req.body;
 
     if (!answers || !Array.isArray(answers)) {
         return res.status(400).json({ message: 'Answers are required and should be an array' });
@@ -96,6 +96,7 @@ router.post('/:formId/save', async (req, res) => {
 
 })
 
+
 router.get('/:formId/responses', async (req, res) => {
     const { formId } = req.params;
   
@@ -106,13 +107,30 @@ router.get('/:formId/responses', async (req, res) => {
       }
   
       const responses = await Response.find({ formId });
-      res.json({ formId, responses, email });
+  
+      const formResponses = responses.map(response => {
+        const formAnswers = response.answers.map(answer => {
+          const field = form.fields.find(f => f._id.toString() === answer.fieldId.toString());
+          return {
+            ...answer.toObject(),
+            label: field ? field.label : 'Unknown Field',
+            options: field ? field.options : []
+          };
+        });
+        
+        return {
+          ...response.toObject(),
+          answers: formAnswers
+        };
+      });
+  
+      res.json(formResponses);
     } catch (error) {
       res.status(500).json({ message: 'Error retrieving responses', error: error.message });
     }
   });
 
-  router.put('/:formId', async (req, res) => {
+router.put('/:formId', async (req, res) => {
     const { formId } = req.params;
     const { title, fields } = req.body;
 

@@ -14,7 +14,6 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import NavBar from '../components/NavBar';
 import { authContext } from '../api/authContext';
 import Cookies from 'js-cookie';
 
@@ -27,7 +26,7 @@ const fieldTypes = [
 ];
 
 const CreateForm = ({ existingFormData }) => {
-  const { userState } = useContext(authContext); // Get userState from context
+  const { userState } = useContext(authContext);
   const navigate = useNavigate();
   const [fields, setFields] = useState(existingFormData?.fields || []);
   const [title, setTitle] = useState(existingFormData?.title || '');
@@ -35,7 +34,6 @@ const CreateForm = ({ existingFormData }) => {
   const userId = Cookies.get('userId');
 
   useEffect(() => {
-    // Update fields and title if existingFormData changes
     if (existingFormData) {
       setTitle(existingFormData.title);
       setFields(existingFormData.fields);
@@ -88,15 +86,20 @@ const CreateForm = ({ existingFormData }) => {
     }
 
     try {
-      const response = await axios.post(`http://localhost:8000/form/${userId}`, formData);
-      console.log('Form saved:', response.data);
-      navigate(`/form/${response.data._id}`);
+      if (existingFormData) {
+        const response = await axios.put(`http://localhost:8000/form/${existingFormData._id}`, formData);
+        console.log('Form updated:', response.data);
+        alert('Form updated successfully!');
+      } else {
+        const response = await axios.post(`http://localhost:8000/form/${userId}`, formData);
+        console.log('Form saved:', response.data);
+        navigate(`/form/${response.data._id}`);
+      }
     } catch (error) {
       console.error('Error saving form:', error);
     }
   };
 
-  // Drag and drop handlers
   const handleDragStart = (index) => {
     setDraggedFieldIndex(index);
   };
@@ -223,7 +226,7 @@ const CreateForm = ({ existingFormData }) => {
           Add Field
         </Button>
         <Button variant="outlined" color="primary" onClick={saveForm}>
-          Save
+          {existingFormData ? 'Update Form' : 'Save Form'}
         </Button>
       </Box>
     </>

@@ -29,7 +29,7 @@ const Home = () => {
   }, []);
 
   const openForm = (id) => {
-    navigate(`/form/${id}`);
+    navigate(`/your-form/${id}`);
   };
 
   const goToCreateForm = () => {
