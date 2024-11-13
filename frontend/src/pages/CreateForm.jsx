@@ -87,11 +87,11 @@ const CreateForm = ({ existingFormData }) => {
 
     try {
       if (existingFormData) {
-        const response = await axios.put(`http://localhost:8000/form/${existingFormData._id}`, formData);
+        const response = await axios.put(`https://form-app-9b6v.onrender.com/form/${existingFormData._id}`, formData);
         console.log('Form updated:', response.data);
         alert('Form updated successfully!');
       } else {
-        const response = await axios.post(`http://localhost:8000/form/${userId}`, formData);
+        const response = await axios.post(`https://form-app-9b6v.onrender.com/form/${userId}`, formData);
         console.log('Form saved:', response.data);
         navigate(`/form/${response.data._id}`);
       }

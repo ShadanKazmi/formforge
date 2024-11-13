@@ -24,7 +24,7 @@ export const AuthProvider = (props) => {
 
     const fetchUserDetails = async (userId) => {
         try {
-            const response = await axios.get(`http://localhost:8000/auth/${userId}`);
+            const response = await axios.get(`https://form-app-9b6v.onrender.com/auth/${userId}`);
             const userData = response.data;
             setUser(userData);
         } catch (error) {

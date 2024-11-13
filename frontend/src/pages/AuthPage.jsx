@@ -52,7 +52,7 @@ const AuthPage = () => {
       formData.append('email', signUpForm.email);
       formData.append('password', signUpForm.password);
 
-      const response = await axios.post('http://localhost:8000/auth/signup', formData, {
+      const response = await axios.post('https://form-app-9b6v.onrender.com/auth/signup', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -66,7 +66,7 @@ const AuthPage = () => {
 
   const handleLoginSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/auth/login', loginForm);
+      const response = await axios.post('https://form-app-9b6v.onrender.com/auth/login', loginForm);
       const loggedinToken = response.data.token;
       const userData = {
         userId: response.data.userId,

@@ -8,13 +8,13 @@ const Form = () => {
   const { formid } = useParams();
   const [form, setForm] = useState(null);
   const [responses, setResponses] = useState({});
-  const [email, setEmail] = useState(''); // State for the email field
-  const [emailError, setEmailError] = useState(false); // To handle email validation
+  const [email, setEmail] = useState(''); 
+  const [emailError, setEmailError] = useState(false); 
 
   useEffect(() => {
     const fetchForm = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/form/${formid}`);
+        const res = await axios.get(`https://form-app-9b6v.onrender.com/form/${formid}`);
         setForm(res.data);
       } catch (error) {
         console.error('Error fetching form:', error);
@@ -38,7 +38,7 @@ const Form = () => {
         fieldId,
         answer: responses[fieldId],
       }));
-      await axios.post(`http://localhost:8000/form/${formid}/save`, 
+      await axios.post(`https://form-app-9b6v.onrender.com/form/${formid}/save`, 
         { email: email, answers: answerData },
         { headers: { 'Content-Type': 'application/json' } }
       );

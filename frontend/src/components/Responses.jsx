@@ -10,7 +10,7 @@ const Responses = () => {
   useEffect(() => {
     const fetchResponses = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/form/${formid}/responses`);
+        const res = await axios.get(`https://form-app-9b6v.onrender.com/form/${formid}/responses`);
         setResponses(res.data);
       } catch (error) {
         console.error('Error fetching responses:', error);
