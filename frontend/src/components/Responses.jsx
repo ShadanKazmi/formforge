@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, List, ListItem, Divider, Paper } from '@mui/material';
+import { Box, Typography, List, Divider, Paper } from '@mui/material';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
@@ -52,8 +52,32 @@ const Responses = () => {
                     {answer.options.join(' | ')}
                   </Typography>
                 )}
-                <Typography variant="body1" sx={{ ml: 2, color: 'text.primary', backgroundColor: '#f9f9f9', p: 1, borderRadius: 1 }}>
-                  {answer.answer}
+                <Typography
+                  variant="body1"
+                  sx={{
+                    ml: 2,
+                    color: 'text.primary',
+                    backgroundColor: '#f9f9f9',
+                    p: 1,
+                    borderRadius: 1
+                  }}
+                >
+                  {typeof answer.answer === 'object' && !Array.isArray(answer.answer) && answer.answer !== null ? (
+                  <Box sx={{ ml: 2, backgroundColor: '#f9f9f9', p: 1, borderRadius: 1 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Selected options:</Typography>
+                    <Typography variant="body1" sx={{ color: 'text.primary' }}>
+                      {Object.keys(answer.answer).filter(key => answer.answer[key]).map((key) => (
+                        <Box key={key} sx={{ display: 'inline-block', mr: 1, mb: 1, backgroundColor: '#e0e0e0', p: 1, borderRadius: 2 }}>
+                          {key}
+                        </Box>
+                      ))}
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Typography variant="body1" sx={{ ml: 2, color: 'text.primary', backgroundColor: '#f9f9f9', p: 1, borderRadius: 1 }}>
+                    {typeof answer.answer === 'string' || typeof answer.answer === 'number' ? answer.answer : JSON.stringify(answer.answer)}
+                  </Typography>
+                )}
                 </Typography>
               </Box>
             ))}

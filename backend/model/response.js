@@ -15,11 +15,11 @@ const responseSchema = new Schema ({
                 type: Schema.Types.ObjectId,
                 required: true
             },
-            label: {               // Add label field
+            label: {               
                 type: String,
                 required: true
             },
-            options: [{            // Add options field
+            options: [{           
                 type: String
             }],
             answer: {

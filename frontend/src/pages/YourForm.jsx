@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Responses from '../components/Responses';
 
 const YourForm = () => {
-  const [view, setView] = useState('preview'); // 'preview', 'edit', 'responses'
+  const [view, setView] = useState('preview');
   const { formid } = useParams();
   const [existingFormData, setExistingFormData] = useState(null);
 
