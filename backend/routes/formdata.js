@@ -64,37 +64,87 @@ router.post('/:userId', async (req, res) => {
 });
 
 
+// router.post('/:formId/save', async (req, res) => {
+//     const { formId } = req.params;
+//     const {email, answers} = req.body;
+
+//     if (!answers || !Array.isArray(answers)) {
+//         return res.status(400).json({ message: 'Answers are required and should be an array' });
+//     }
+
+
+//     try {
+//         const form = await Form.findById(formId);
+//         if (!form) {
+//             return res.status(404).json({ message: 'Form not found' });
+//         }
+
+//         const newResponse = new Response({
+//             formId,
+//             email,
+//             answers,
+//         });
+//         const savedResponse = await newResponse.save();
+
+//         res.json({ message: 'Response submitted successfully', response: savedResponse });
+
+        
+//     } catch (error) {
+//         console.error("Error details:", error);
+//         res.status(500).json({ message: 'Error submitting response', error: error.message });
+//     }
+
+// })
+
 router.post('/:formId/save', async (req, res) => {
     const { formId } = req.params;
-    const {email, answers} = req.body;
+    const { email, answers } = req.body;
 
     if (!answers || !Array.isArray(answers)) {
         return res.status(400).json({ message: 'Answers are required and should be an array' });
     }
 
-
     try {
+        // Find the form to get the field labels and verify existence
         const form = await Form.findById(formId);
         if (!form) {
             return res.status(404).json({ message: 'Form not found' });
         }
 
+        const formAnswers = answers.map((answer) => {
+            const field = form.fields.find((f) => f._id.toString() === answer.fieldId);
+            if (field) {
+                return {
+                    ...answer,
+                    label: answer.label || field.label,
+                    options: answer.options || field.options || []
+                };
+            }
+            return answer;
+        });
+
+        const invalidAnswers = formAnswers.some((answer) => !answer.label);
+        if (invalidAnswers) {
+            return res.status(400).json({ message: 'All answers must have a valid label' });
+        }
+
         const newResponse = new Response({
             formId,
             email,
-            answers,
+            answers: formAnswers,
         });
         const savedResponse = await newResponse.save();
 
         res.json({ message: 'Response submitted successfully', response: savedResponse });
 
-        
+
     } catch (error) {
         console.error("Error details:", error);
         res.status(500).json({ message: 'Error submitting response', error: error.message });
     }
+});
 
-})
+
 
 
 router.get('/:formId/responses', async (req, res) => {

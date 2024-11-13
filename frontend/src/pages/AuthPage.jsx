@@ -58,6 +58,9 @@ const AuthPage = () => {
         },
       });
       setUserState('Logged-In');
+      if (userState === 'Logged-In') {
+        navigate('/');
+      }
     } catch (error) {
       console.error('Error signing up:', error);
       setError('Error signing up. Please try again.');
@@ -77,6 +80,9 @@ const AuthPage = () => {
       };
 
       login(loggedinToken, userData);
+      if (userState === 'Logged-In') {
+        navigate('/');
+      }
     } catch (error) {
       console.error('Error logging in:', error);
       setError('Error logging in. Please check your credentials.');
@@ -98,10 +104,6 @@ const AuthPage = () => {
     });
     setError('');
   };
-
-  if (userState === 'Logged-In') {
-    navigate('/');
-  }
 
   return (
     <Container maxWidth="xs">
