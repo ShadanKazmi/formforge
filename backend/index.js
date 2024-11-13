@@ -10,10 +10,13 @@ const PORT = 8000;
 const corsOptions = {
     credentials: true,
   };
-mongoose.connect('mongodb://127.0.0.1:27017')
-.then(e=>console.log("MongoDB Connected"));
+
+mongoose.connect(process.env.MONGO_URL)
+.then(e => console.log("MongoDB Connected"));
+
 
 app.use(express.json());
+app.use(express.urlencoded({extended:false,useNewUrlParser: true, useUnifiedTopology: true}))
 app.use(cors());
 app.use(cors(corsOptions));
 
