@@ -202,7 +202,7 @@ const Home = () => {
       <IconButton
         color="primary"
         aria-label="create form"
-        onClick={() => userId ? goToCreateForm({ title: '', fields: [] }) : handleLoginPrompt()}
+        onClick={() => goToCreateForm({ title: '', fields: [] })}
         sx={{
           position: 'fixed',
           bottom: '20px',
