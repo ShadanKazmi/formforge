@@ -18,6 +18,8 @@ import PollIcon from '@mui/icons-material/Poll';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import WorkIcon from '@mui/icons-material/Work';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
+import ShareIcon from '@mui/icons-material/Share';
+
 
 const prebuiltForms = [
   {
@@ -102,6 +104,8 @@ const iconMap = {
   job: <WorkIcon fontSize="large" />, 
 };
 
+
+
 const Home = () => {
   const [forms, setForms] = useState([]);
   const navigate = useNavigate();
@@ -128,6 +132,18 @@ const Home = () => {
   const goToCreateForm = (prebuiltForm) => {
     navigate('/create-form', { state: { existingFormData: prebuiltForm } });
   };
+
+  const generateShareLink = (formId) => {
+    return `https://formforge-ebon.vercel.app//form/${formId}`;
+  };
+  
+  const handleShare = (formId) => {
+    const shareLink = generateShareLink(formId);
+    navigator.clipboard.writeText(shareLink).then(() => {
+      alert('Form link copied to clipboard!');
+    });
+  };
+
 
   return (
     <div style={{ padding: '30px', display:'flex', flexDirection:'column' }}>
@@ -184,6 +200,15 @@ const Home = () => {
                 <CardContent>
                   <BorderColorIcon/>
                   <Typography variant="h6">{form.title}</Typography>
+                  <IconButton
+                  color="primary"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevents triggering form open action
+                    handleShare(form._id);
+                  }}
+                >
+                  <ShareIcon />
+                </IconButton>
                 </CardContent>
               </Card>
             </Grid>
