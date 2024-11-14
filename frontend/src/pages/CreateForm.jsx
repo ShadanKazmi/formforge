@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { authContext } from '../api/authContext';
 import Cookies from 'js-cookie';
@@ -25,13 +25,17 @@ const fieldTypes = [
   { label: 'Dropdown', value: 'dropdown' },
 ];
 
-const CreateForm = ({ existingFormData }) => {
+const CreateForm = ({ existingFormData: propExistingFormData  }) => {
   const { userState } = useContext(authContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const locationExistingFormData = location.state?.existingFormData;
+  const existingFormData = locationExistingFormData || propExistingFormData;
   const [fields, setFields] = useState(existingFormData?.fields || []);
   const [title, setTitle] = useState(existingFormData?.title || '');
   const [draggedFieldIndex, setDraggedFieldIndex] = useState(null);
   const userId = Cookies.get('userId');
+
 
   useEffect(() => {
     if (existingFormData) {

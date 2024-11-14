@@ -10,11 +10,49 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Cookies from 'js-cookie';
 
+const prebuiltForms = [
+  {
+    title: 'Blank Form',
+    fields: [],
+  },
+  {
+    title: 'Contact Info',
+    fields: [
+      { id: 1, label: 'Name', type: 'text', options: [] },
+      { id: 2, label: 'Email', type: 'text', options: [] },
+      { id: 3, label: 'Phone Number', type: 'number', options: [] },
+    ],
+  },
+  {
+    title: 'Invite for Party',
+    fields: [
+      { id: 1, label: 'Name', type: 'text', options: [] },
+      { id: 2, label: 'Will you attend?', type: 'radio', options: ['Yes', 'No', 'Maybe'] },
+      { id: 3, label: 'Number of Guests', type: 'number', options: [] },
+    ],
+  },
+  {
+    title: 'Registration for Event',
+    fields: [
+      { id: 1, label: 'Full Name', type: 'text', options: [] },
+      { id: 2, label: 'Email Address', type: 'text', options: [] },
+      { id: 3, label: 'Contact Number', type: 'number', options: [] },
+      { id: 4, label: 'Select Session', type: 'dropdown', options: ['Morning', 'Afternoon', 'Evening'] },
+    ],
+  },
+  {
+    title: 'RSVP',
+    fields: [
+      { id: 1, label: 'Name', type: 'text', options: [] },
+      { id: 2, label: 'Are you attending?', type: 'radio', options: ['Yes', 'No'] },
+    ],
+  },
+];
 
 const Home = () => {
   const [forms, setForms] = useState([]);
   const navigate = useNavigate();
-  const userId = Cookies.get('userId')
+  const userId = Cookies.get('userId');
 
   useEffect(() => {
     const fetchForms = async () => {
@@ -32,19 +70,19 @@ const Home = () => {
     navigate(`/your-form/${id}`);
   };
 
-  const goToCreateForm = () => {
-    navigate('/create-form');
+  const goToCreateForm = (prebuiltForm) => {
+    navigate('/create-form', { state: { existingFormData: prebuiltForm } });
   };
 
   return (
     <>
       <div style={{ padding: '20px' }}>
         <Grid container spacing={2} justifyContent="center">
-          {[...Array(5)].map((_, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={2} key={index}>
-              <Card>
+          {prebuiltForms.map((form, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={2} key={index} onClick={() => goToCreateForm(form)}>
+              <Card sx={{ cursor: 'pointer' }}>
                 <CardContent>
-                  <Typography variant="h6" align="center">Placeholder</Typography>
+                  <Typography variant="h6" align="center">{form.title}</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -71,7 +109,7 @@ const Home = () => {
         <IconButton
           color="primary"
           aria-label="create form"
-          onClick={goToCreateForm}
+          onClick={() => goToCreateForm({ title: '', fields: [] })}
           sx={{
             position: 'fixed',
             bottom: '20px',
@@ -80,7 +118,7 @@ const Home = () => {
             color: 'white',
             borderRadius: '50%',
             boxShadow: 3,
-            padding: 1.5
+            padding: 1.5,
           }}
         >
           <AddIcon />
