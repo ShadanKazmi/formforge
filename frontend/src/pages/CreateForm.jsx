@@ -230,7 +230,7 @@ const CreateForm = ({ existingFormData: propExistingFormData  }) => {
           Add Field
         </Button>
         <Button variant="outlined" color="primary" onClick={saveForm}>
-          {existingFormData ? 'Update Form' : 'Save Form'}
+          {existingFormData ? 'Save' : 'Save'}
         </Button>
       </Box>
     </>

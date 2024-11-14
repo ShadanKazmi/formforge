@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, List, Divider, Paper } from '@mui/material';
+import { Box, Typography, List, Divider, Paper, Grid } from '@mui/material';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
@@ -28,62 +28,94 @@ const Responses = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: 800, margin: 'auto', mt: 5, p: 2 }}>
-      <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
+    <Box sx={{ maxWidth: 900, margin: 'auto', mt: 5, p: 3 }}>
+      <Typography
+        variant="h4"
+        align="center"
+        gutterBottom
+        sx={{ fontWeight: 'bold', color: 'black', mb: 4 }}
+      >
         Form Responses
       </Typography>
-      <List>
+
+      <Grid container spacing={3}>
         {responses.map((response, index) => (
-          <Paper key={index} sx={{ mb: 3, p: 2, boxShadow: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1, color: 'primary.main' }}>
-              Submitted by: <span style={{ fontWeight: 500 }}>{response.email}</span>
-            </Typography>
-            <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-              Submitted on: {new Date(response.submittedAt).toLocaleString()}
-            </Typography>
-            <Divider sx={{ my: 2 }} />
-            {response.answers.map((answer, idx) => (
-              <Box key={idx} sx={{ mb: 1 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                  {answer.label}:
-                </Typography>
-                {answer.options && answer.options.length > 0 && (
-                  <Typography variant="body2" color="textSecondary" sx={{ ml: 2, mb: 1 }}>
-                    {answer.options.join(' | ')}
+          <Grid item xs={12} sm={6} md={12} key={index}>
+            <Paper
+              sx={{
+                p: 3,
+                boxShadow: 3,
+                borderRadius: 2,
+                backgroundColor: '#f5f5f5',
+                borderLeft: `5px solid #1976d2`,
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{ mb: 1, color: 'black', fontWeight: 'bold' }}
+              >
+                Submitted by: <span style={{ fontWeight: 500 }}>{response.email}</span>
+              </Typography>
+              <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
+                Submitted on: {new Date(response.submittedAt).toLocaleString()}
+              </Typography>
+
+              <Divider sx={{ my: 2 }} />
+
+              {response.answers.map((answer, idx) => (
+                <Box key={idx} sx={{ mb: 2 }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#1976d2' }}>
+                    {answer.label}:
                   </Typography>
-                )}
-                <Typography
-                  variant="body1"
-                  sx={{
-                    ml: 2,
-                    color: 'text.primary',
-                    backgroundColor: '#f9f9f9',
-                    p: 1,
-                    borderRadius: 1
-                  }}
-                >
-                  {typeof answer.answer === 'object' && !Array.isArray(answer.answer) && answer.answer !== null ? (
-                  <Box sx={{ ml: 2, backgroundColor: '#f9f9f9', p: 1, borderRadius: 1 }}>
-                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Selected options:</Typography>
-                    <Typography variant="body1" sx={{ color: 'text.primary' }}>
-                      {Object.keys(answer.answer).filter(key => answer.answer[key]).map((key) => (
-                        <Box key={key} sx={{ display: 'inline-block', mr: 1, mb: 1, backgroundColor: '#e0e0e0', p: 1, borderRadius: 2 }}>
-                          {key}
-                        </Box>
-                      ))}
+
+                  {answer.options && answer.options.length > 0 && (
+                    <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
+                      {answer.options.join(' | ')}
                     </Typography>
+                  )}
+
+                  <Box
+                    sx={{
+                      p: 2,
+                      backgroundColor: '#e3f2fd',
+                      borderRadius: 1,
+                      color: 'text.primary',
+                      fontWeight: '500',
+                    }}
+                  >
+                    {typeof answer.answer === 'object' && !Array.isArray(answer.answer) && answer.answer !== null ? (
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                          Selected options:
+                        </Typography>
+                        {Object.keys(answer.answer)
+                          .filter((key) => answer.answer[key])
+                          .map((key) => (
+                            <Box
+                              key={key}
+                              sx={{
+                                backgroundColor: '#bbdefb',
+                                p: 1,
+                                borderRadius: 2,
+                                boxShadow: 1,
+                                color: '#1976d2',
+                                fontSize: '0.875rem',
+                              }}
+                            >
+                              {key}
+                            </Box>
+                          ))}
+                      </Box>
+                    ) : (
+                      <Typography variant="body1">{answer.answer}</Typography>
+                    )}
                   </Box>
-                ) : (
-                  <Typography variant="body1" sx={{ ml: 2, color: 'text.primary', backgroundColor: '#f9f9f9', p: 1, borderRadius: 1 }}>
-                    {typeof answer.answer === 'string' || typeof answer.answer === 'number' ? answer.answer : JSON.stringify(answer.answer)}
-                  </Typography>
-                )}
-                </Typography>
-              </Box>
-            ))}
-          </Paper>
+                </Box>
+              ))}
+            </Paper>
+          </Grid>
         ))}
-      </List>
+      </Grid>
     </Box>
   );
 };

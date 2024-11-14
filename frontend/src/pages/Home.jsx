@@ -17,6 +17,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PollIcon from '@mui/icons-material/Poll';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import WorkIcon from '@mui/icons-material/Work';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
 
 const prebuiltForms = [
   {
@@ -128,10 +129,6 @@ const Home = () => {
     navigate('/create-form', { state: { existingFormData: prebuiltForm } });
   };
 
-  const handleLoginPrompt = () => {
-    navigate('/auth');
-  };
-
   return (
     <div style={{ padding: '30px', display:'flex', flexDirection:'column' }}>
       <Typography variant="h5" style={{ marginTop: '40px', marginBottom: '20px' }}>
@@ -176,6 +173,7 @@ const Home = () => {
               <Card sx={{
                 cursor: 'pointer',
                 padding: 1,
+                textAlign: 'center',
                 backgroundColor: '#f3f4f6',
                 transition: 'transform 0.2s',
                 '&:hover': {
@@ -184,10 +182,8 @@ const Home = () => {
                 },
               }}>
                 <CardContent>
+                  <BorderColorIcon/>
                   <Typography variant="h6">{form.title}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Number of fields: {form.fields.length}
-                  </Typography>
                 </CardContent>
               </Card>
             </Grid>

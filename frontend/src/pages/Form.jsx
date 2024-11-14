@@ -8,8 +8,8 @@ const Form = () => {
   const { formid } = useParams();
   const [form, setForm] = useState(null);
   const [responses, setResponses] = useState({});
-  const [email, setEmail] = useState(''); 
-  const [emailError, setEmailError] = useState(false); 
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
 
   useEffect(() => {
     const fetchForm = async () => {
@@ -54,8 +54,16 @@ const Form = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: 600, margin: 'auto', padding: 3, boxShadow: 3, borderRadius: 2 }}>
-      <Typography variant="h4" gutterBottom align="center">
+    <Box sx={{
+      maxWidth: 600,
+      margin: 'auto',
+      padding: 3,
+      boxShadow: 4,
+      borderRadius: 3,
+      backgroundColor: '#fff',
+      border: '1px solid #ddd'
+    }}>
+      <Typography variant="h4" gutterBottom align="center" sx={{ color: 'black', fontWeight: 'bold' }}>
         {form.title || 'Untitled Form'}
       </Typography>
 
@@ -67,12 +75,21 @@ const Form = () => {
         onChange={(e) => setEmail(e.target.value)}
         error={emailError}
         helperText={emailError ? 'Email is required' : ''}
-        sx={{ marginBottom: 3 }}
+        sx={{
+          marginBottom: 3,
+          backgroundColor: '#f7f7f7',
+          borderRadius: 1,
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': { borderColor: '#1976d2' },
+            '&:hover fieldset': { borderColor: '#1976d2' },
+            '&.Mui-focused fieldset': { borderColor: '#1976d2' },
+          },
+        }}
       />
 
       {form.fields.map((field) => (
         <Box key={field._id} sx={{ marginBottom: 3 }}>
-          <Typography variant="h6" sx={{ marginBottom: 1 }}>
+          <Typography variant="h6" sx={{ marginBottom: 1, color: '#333', fontWeight: 'bold' }}>
             {field.label}
           </Typography>
 
@@ -82,6 +99,13 @@ const Form = () => {
               fullWidth
               placeholder="Your answer"
               onChange={(e) => handleFieldChange(field._id, e.target.value)}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: '#1976d2' },
+                  '&:hover fieldset': { borderColor: '#1976d2' },
+                  '&.Mui-focused fieldset': { borderColor: '#1976d2' },
+                },
+              }}
             />
           )}
 
@@ -92,6 +116,13 @@ const Form = () => {
               type="number"
               placeholder="Enter a number"
               onChange={(e) => handleFieldChange(field._id, e.target.value)}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: '#1976d2' },
+                  '&:hover fieldset': { borderColor: '#1976d2' },
+                  '&.Mui-focused fieldset': { borderColor: '#1976d2' },
+                },
+              }}
             />
           )}
 
@@ -107,7 +138,7 @@ const Form = () => {
                       })
                     }
                   />
-                  <Typography>{option}</Typography>
+                  <Typography sx={{ color: '#333' }}>{option}</Typography>
                 </Box>
               ))}
             </Box>
@@ -121,18 +152,25 @@ const Form = () => {
                     onChange={() => handleFieldChange(field._id, option)}
                     checked={responses[field._id] === option}
                   />
-                  <Typography>{option}</Typography>
+                  <Typography sx={{ color: '#333' }}>{option}</Typography>
                 </Box>
               ))}
             </Box>
           )}
 
           {field.type === 'dropdown' && (
-            <FormControl fullWidth variant="outlined">
+            <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
               <InputLabel>{field.label}</InputLabel>
               <Select
                 value={responses[field._id] || ''}
                 onChange={(e) => handleFieldChange(field._id, e.target.value)}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': { borderColor: '#1976d2' },
+                    '&:hover fieldset': { borderColor: '#1976d2' },
+                    '&.Mui-focused fieldset': { borderColor: '#1976d2' },
+                  },
+                }}
               >
                 {field.options.map((option, index) => (
                   <MenuItem key={index} value={option}>
@@ -150,7 +188,13 @@ const Form = () => {
         color="primary"
         fullWidth
         onClick={handleSubmit}
-        sx={{ marginTop: 3 }}
+        sx={{
+          marginTop: 3,
+          padding: '12px',
+          fontWeight: 'bold',
+          backgroundColor: '#1976d2',
+          '&:hover': { backgroundColor: '#1565c0' },
+        }}
       >
         Submit
       </Button>

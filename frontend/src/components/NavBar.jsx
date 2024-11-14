@@ -78,7 +78,7 @@ const NavBar = ({ title }) => {
                     }
                   }}
                 >
-                  <Typography variant="body1" sx={{ color: 'white' }}>{user.firstName}</Typography>
+                  <Typography variant="body1" sx={{ color: 'white' }}>Hi {user.firstName}</Typography>
                 </Button>
 
                 <Menu
